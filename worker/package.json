@@ -1,0 +1,1 @@
+{"name":"foodlens-recognition-worker","private":true,"type":"module","scripts":{"dev":"wrangler dev","deploy":"wrangler deploy","check":"tsc --noEmit","bundle":"wrangler deploy --dry-run"},"devDependencies":{"wrangler":"latest","@cloudflare/workers-types":"latest","typescript":"~6.0.3"}}
