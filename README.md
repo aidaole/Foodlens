@@ -76,6 +76,7 @@ npm run web
 - `tests/nutrition.test.mjs`：换算、缺失值、份量提醒、过敏原和血糖规则测试。
 - `docs/cloudflare-research.md`：免费服务调研及接入方案。
 - `docs/release-plan.md`：原生体验与后续上架准备。
+- [海外协议与审核材料](docs/legal/README.md)：英文隐私政策、使用条款、支持页、订阅草案及商店填写说明；运营者信息待补齐，尚未公开生效。
 - `docs/verification.md`：已验证内容与限制。
 
 ## 检查与构建
