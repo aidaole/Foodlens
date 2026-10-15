@@ -11,6 +11,7 @@ import {
   emptyState,
   restoreState,
   appendRecognition,
+  revokeCloudConsent,
   type PersistedState,
 } from "./persisted-state";
 export type { RecordItem } from "./persisted-state";
@@ -25,6 +26,8 @@ type Store = PersistedState & {
   ready: boolean;
   saveRecognition: (food: Food, thumbnail?: string) => void;
   allowCloud: () => void;
+  revokeCloud: () => void;
+  acknowledgeLegal: (revision: string) => void;
   storageError: string;
 };
 const Context = createContext<Store | null>(null);
@@ -69,6 +72,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         : [...s.saved, id],
     }));
   const allowCloud = () => setState((s) => ({ ...s, cloudConsent: true }));
+  const revokeCloud = () => setState(revokeCloudConsent);
+  const acknowledgeLegal = (revision: string) => setState(s => ({ ...s, legalAcceptance: { revision, at: new Date().toISOString() } }));
   const saveRecognition = (food: Food, thumbnail?: string) =>
     setState(s => appendRecognition(s, food, thumbnail));
   const clear = () =>
@@ -84,6 +89,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         setProfile,
         saveRecognition,
         allowCloud,
+        revokeCloud,
+        acknowledgeLegal,
         addHistory,
         toggleSaved,
         clear,

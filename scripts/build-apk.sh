@@ -10,6 +10,7 @@ export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 export JAVA_HOME="$(/usr/libexec/java_home -v 17)"
 FOODLENS_VERSION="$(node -p 'require("./package.json").version')"
+node scripts/sync-legal.mjs
 node node_modules/expo/bin/cli prebuild --platform android --no-install
 (cd android && ./gradlew :app:assembleRelease -PreactNativeArchitectures=arm64-v8a,armeabi-v7a --max-workers=4 --console=plain -Dorg.gradle.jvmargs='-Xmx4096m -XX:MaxMetaspaceSize=1024m')
 mkdir -p outputs

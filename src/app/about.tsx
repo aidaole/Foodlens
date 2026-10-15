@@ -1,15 +1,17 @@
 import { View, Text, Linking } from "react-native";
 import { cloudConfigured } from "../lib/recognize";
 import { Shell, s, Button, SectionTitle } from "../components/ui";
+import { LegalLinks } from '../components/LegalLinks';
 export default function About() {
   return (
     <Shell title="关于食刻">
-      <Text style={s.eyebrow}>FOODLENS / VERSION 0.4.2</Text>
+      <Text style={s.eyebrow}>FOODLENS / VERSION 0.4.3</Text>
       <Text style={s.pageHeading}>让标签更好懂。</Text>
       <Text style={[s.body, { marginTop: 12 }]}>
         食刻是一个面向 iOS 与 Android 的食品标签解读 MVP。
       </Text>
       <View style={{ gap: 20, marginTop: 28 }}>
+        <View style={s.card}><SectionTitle title="用户协议、隐私与支持" /><LegalLinks /></View>
         <View style={s.card}>
           <SectionTitle title="这一版可以体验什么" />
           <Text style={s.body}>
@@ -28,7 +30,7 @@ export default function About() {
           <Text style={s.body}>
             不需要注册或定位。首次发送照片前会说明用途并征得同意。只有裁剪后的图片发送至Cloudflare
             Workers
-            AI，饮食偏好不上传。识别接口不保存图片或识别正文，仅保留用于限制调用次数的匿名计数。识别文字、缩略图、收藏和记录保存在当前设备，可在我的页面清除。识别记录保留压缩后的标签缩略图，仅存本机，清除本地数据时一并删除。
+            AI，饮食偏好不上传。识别接口不保存图片或识别正文，保留用于限制调用次数的假名化摘要及计数。Cloudflare 也会处理基础设施运行信息。识别文字、缩略图、收藏和记录保存在当前设备，可在我的页面清除；云端授权也可单独关闭。详情见完整隐私政策。
           </Text>
           <Text style={[s.body, { marginTop: 14 }]}>
             Cloudflare按其服务条款和隐私政策处理推理输入。请避开人脸或个人信息。外部参考链接会打开相应网站。

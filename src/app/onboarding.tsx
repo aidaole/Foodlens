@@ -14,6 +14,7 @@ import { foods } from "../lib/food";
 import { useStore } from "../lib/store";
 import { SwipePager } from "../components/SwipePager";
 import { NutritionChoices } from "../components/NutritionChoices";
+import { LegalLinks } from '../components/LegalLinks';
 export default function Onboarding() {
   const [page, setPage] = useState(0);
   const store = useStore();
@@ -129,6 +130,7 @@ export default function Onboarding() {
               {page < 2 ? "下一页" : "开始拍照"}
             </Button>
           </View>
+          <LegalLinks compact />
         </View>
       </View>
     </SafeAreaView>

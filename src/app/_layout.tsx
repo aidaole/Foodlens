@@ -4,9 +4,11 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, View } from "react-native";
 import { StoreProvider, useStore } from "../lib/store";
+import { hasLegalAcknowledgment, legalContent } from '../lib/legal';
 export const unstable_settings = { initialRouteName: "(tabs)" };
 function Navigator() {
-  const { ready, onboarded } = useStore();
+  const { ready, onboarded, legalAcceptance } = useStore();
+  const acknowledged = hasLegalAcknowledgment(legalAcceptance, legalContent.revision);
   if (!ready)
     return (
       <View
@@ -28,7 +30,7 @@ function Navigator() {
         contentStyle: { backgroundColor: "#F7F8F2" },
       }}
     >
-      <Stack.Protected guard={onboarded}>
+      <Stack.Protected guard={onboarded && acknowledged}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="result" />
         <Stack.Screen name="guide" />
@@ -37,6 +39,10 @@ function Navigator() {
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />
       </Stack.Protected>
+      <Stack.Protected guard={onboarded && !acknowledged}>
+        <Stack.Screen name="agreement" />
+      </Stack.Protected>
+      <Stack.Screen name="legal" />
     </Stack>
   );
 }

@@ -10,6 +10,7 @@ export type PersistedState = {
   onboarded: boolean;
   recognized: Food[];
   cloudConsent: boolean;
+  legalAcceptance: { revision: string; at: string } | null;
   thumbnails: Record<string, string>;
 };
 export const emptyState = (): PersistedState => ({
@@ -19,6 +20,7 @@ export const emptyState = (): PersistedState => ({
   onboarded: false,
   recognized: [],
   cloudConsent: false,
+  legalAcceptance: null,
   thumbnails: {},
 });
 export function appendRecognition(state: PersistedState, food: Food, thumbnail?: string): PersistedState {
@@ -67,5 +69,9 @@ export function restoreState(value: unknown): PersistedState {
     recognized,
     thumbnails: restoreThumbnails(p.thumbnails, recognized.map(f=>f.id)),
     cloudConsent: p.cloudConsent === true,
+    legalAcceptance: p.legalAcceptance && typeof p.legalAcceptance.revision === 'string' && typeof p.legalAcceptance.at === 'string' && Number.isFinite(Date.parse(p.legalAcceptance.at)) ? { revision: p.legalAcceptance.revision, at: p.legalAcceptance.at } : null,
   };
+}
+export function revokeCloudConsent(state: PersistedState): PersistedState {
+  return { ...state, cloudConsent: false };
 }

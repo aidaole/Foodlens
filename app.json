@@ -2,7 +2,7 @@
   "expo": {
     "name": "食刻 FoodLens",
     "slug": "foodlens",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,7 +19,7 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundColor": "#D6F87C"
       },
-      "versionCode": 9
+      "versionCode": 10
     },
     "web": {
       "bundler": "metro",

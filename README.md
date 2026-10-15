@@ -2,6 +2,10 @@
 
 React Native + Expo + TypeScript 食品标签解读 MVP。iOS、Android 和浏览器共用界面与营养规则。
 
+## 0.4.3 更新
+
+应用内加入中英文用户协议、隐私政策、健康说明与客服帮助，支持离线阅读。在我的、关于、首次引导和上传提示提供入口；完成引导后主动勾选阅读确认，升级保留历史并提示新文档。云端上传仍独立授权，可以单独关闭后续授权而保留历史。当前运营信息未齐，正文明确标为草案；不代表已完成上架或订阅接入。详见 [版本记录](docs/release-0.4.3.md)。
+
 ## 0.4.2 更新
 
 修复新拍照识别成功后，记录仍可能显示默认图的问题：在上传前从仍有效的图片引用生成本地JPEG缩略图，并与对应食品结果一起保存。超过16,000字符时继续降低缩略图尺寸，不再直接丢弃；图片引用不可用时使用实际上传JPEG重试。列表从JPEG头读取比例，尺寸读取失败不再把可显示的照片误换成默认图；图片按原比例显示并保留12px圆角。
@@ -82,7 +86,7 @@ npm run web
 - `tests/nutrition.test.mjs`：换算、缺失值、份量提醒、过敏原和血糖规则测试。
 - `docs/cloudflare-research.md`：免费服务调研及接入方案。
 - `docs/release-plan.md`：原生体验与后续上架准备。
-- [海外协议与审核材料](docs/legal/README.md)：英文隐私政策、使用条款、支持页、订阅草案及商店填写说明；运营者信息待补齐，尚未公开生效。
+- [海外协议与审核材料](docs/legal/README.md)：中英文协议、应用内接入、订阅草案及商店填写说明；运营者信息待补齐，尚未公开生效。
 - `docs/verification.md`：已验证内容与限制。
 
 ## 检查与构建
@@ -102,7 +106,7 @@ npx expo export --platform all
 
 ## Android APK 体验包
 
-当前体验版为 `outputs/FoodLens-0.4.2-preview.apk`（versionCode 9），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
+当前体验版为 `outputs/FoodLens-0.4.3-preview.apk`（versionCode 10），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
 
 签名校验通过，在 API36 ARM64 模拟器安装与冷启动成功；启动后进程保持运行，没有 ReactNativeJS/AndroidRuntime 错误日志。手机相机仍需用户在真机体验。
 

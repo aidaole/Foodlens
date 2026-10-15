@@ -4,6 +4,8 @@ import { Shell, C, s, Icon, Button, SectionTitle } from "../../components/ui";
 import { useStore } from "../../lib/store";
 import { concerns, allergies, Profile } from "../../lib/food";
 import { NutritionChoices } from "../../components/NutritionChoices";
+import { LegalLinks } from '../../components/LegalLinks';
+import { legalContent } from '../../lib/legal';
 export default function ProfileScreen() {
   const store = useStore();
   const [confirm, setConfirm] = useState(false);
@@ -44,6 +46,13 @@ export default function ProfileScreen() {
         >
           <Text style={{ fontSize: 12, color: "#647C48" }}>重看引导 ↗</Text>
         </Pressable>
+      </View>
+      <View style={[s.card, { marginTop: 22 }]}>
+        <SectionTitle title="协议与隐私" eyebrow="YOUR RIGHTS" />
+        {!legalContent.active && <Text style={[s.small, { color: '#8E633A', marginBottom: 8 }]}>上架准备草案 · 运营信息待确认</Text>}
+        <LegalLinks />
+        <Text style={[s.body, { fontSize: 12, marginTop: 16 }]}>云端识别授权：{store.cloudConsent ? '已开启' : '未开启'}。关闭授权后保留已有记录，下次上传重新询问。</Text>
+        {store.cloudConsent && <Pressable accessibilityRole="button" onPress={store.revokeCloud} style={{ paddingVertical: 15 }}><Text style={{ color: '#42632B', fontSize: 13 }}>关闭云端识别授权</Text></Pressable>}
       </View>
       <View
         style={{
@@ -196,7 +205,7 @@ export default function ProfileScreen() {
                 }}
               >
                 <Text style={[s.body, { fontSize: 12, marginBottom: 12 }]}>
-                  将移除偏好、收藏和所有体验记录。
+                  将移除偏好、收藏、识别结果、缩略图和所有体验记录，并重置云端授权及协议阅读确认。系统相册原图不会删除。
                 </Text>
                 <Button
                   tone="light"

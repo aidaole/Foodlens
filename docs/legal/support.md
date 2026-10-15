@@ -14,7 +14,9 @@ For help, email your app version, device model, operating-system version, and th
 
 Photos are sent for recognition only after the app's cloud-processing prompt is accepted. Camera permission and cloud-processing agreement are separate choices. Declining the prompt leaves example results available.
 
-To remove app-saved information, open My (我的), select Clear local data (清除本地数据), and confirm. This clears history, recognized text and values, thumbnails, favorites, preferences, and the cloud-consent setting. The onboarding-completed flag remains. It does not necessarily clear device-managed temporary files or backups, and it does not remove server usage counters.
+To stop future uploads, open My (我的) → Agreements and privacy (协议与隐私) → Turn off cloud recognition (关闭云端识别授权). Existing history remains and the next upload asks again. This does not retract already-sent requests.
+
+To remove app-saved information, open My (我的), select Clear local data (清除本地数据), and confirm. This clears history, recognized text and values, thumbnails, favorites, preferences, the cloud-consent setting, and the legal-document acknowledgment. The onboarding-completed flag remains. It does not necessarily clear device-managed temporary files or backups, and it does not remove server usage counters.
 
 FoodLens currently has no account and no remote history recovery. See the [Privacy Policy](privacy.html) for retention, cloud processing, and privacy rights. Contact the privacy address above for requests about information we hold.
 

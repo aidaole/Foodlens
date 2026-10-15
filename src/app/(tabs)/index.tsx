@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
   ActivityIndicator,
   Modal,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Linking from "expo-linking";
@@ -33,6 +34,7 @@ import { foods } from "../../lib/food";
 import { useStore } from "../../lib/store";
 import { PhotoCrop, type Photo } from "../../components/PhotoCrop";
 import type { RecognitionStage } from "../../lib/recognition-network";
+import { LegalLinks } from '../../components/LegalLinks';
 const stageCopy = {
   connecting: ["正在连接识别服务…", "先检查网络连接，连接成功后再发送照片。"],
   preparing: ["正在准备标签照片…", "正在压缩图片，保留清晰的配料和营养文字。"],
@@ -452,11 +454,9 @@ export default function Scan() {
             padding: 24,
           }}
         >
-          <View
-            style={[
-              s.card,
-              { maxWidth: 500, width: "100%", alignSelf: "center" },
-            ]}
+          <ScrollView
+            style={{ maxWidth: 500, width: '100%', alignSelf: 'center', flexGrow: 0 }}
+            contentContainerStyle={[s.card, { padding: 24 }]}
           >
             <Icon name="shield" size={30} />
             <Text style={[s.heading, { marginTop: 14, fontSize: 22 }]}>
@@ -466,6 +466,8 @@ export default function Scan() {
               图片会发送至 Cloudflare Workers AI
               读取配料和营养表。我们的接口不保存照片；识别文字、结果和压缩缩略图保存在这台设备，饮食偏好不上传。请先裁掉人脸或个人信息。
             </Text>
+            <Text style={[s.small, { fontSize: 12, marginTop: 8 }]}>Cloudflare 会处理运行和安全信息。授权可在「我的」关闭。查看协议后，可回到本页点「重新识别」。</Text>
+            <LegalLinks compact beforeOpen={() => setConsentPhoto(null)} />
             <Button
               style={{ marginTop: 20 }}
               onPress={() => {
@@ -485,7 +487,7 @@ export default function Scan() {
             >
               先不发送
             </Button>
-          </View>
+          </ScrollView>
         </View>
       </Modal>
     </>

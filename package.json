@@ -1,6 +1,6 @@
 {
   "name": "foodlens",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "expo-router/entry",
   "dependencies": {
     "@expo/router-server": "^57.0.12",
@@ -41,7 +41,12 @@
     "build": "expo export --platform web",
     "lint": "expo lint",
     "test": "node --test tests/*.test.mjs",
-    "preview": "node scripts/serve-preview.mjs"
+    "preview": "node scripts/serve-preview.mjs",
+    "legal:sync": "node scripts/sync-legal.mjs",
+    "prestart": "npm run legal:sync",
+    "prebuild": "npm run legal:sync",
+    "pretypecheck": "npm run legal:sync",
+    "pretest": "npm run legal:sync"
   },
   "private": true,
   "engines": {

@@ -1,24 +1,18 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { missingOperatorFields, syncLegalBundle } from './legal-content.mjs';
 
 const project = fileURLToPath(new URL("../", import.meta.url));
 const source = path.join(project, "docs/legal");
 const config = JSON.parse(await readFile(path.join(source, "operator.json"), "utf8"));
 const publish = process.argv.includes("--publish");
 const email = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
-const missing = [];
-if (typeof config.operatorName !== "string" || !config.operatorName.trim()) missing.push("operatorName");
-for (const key of ["privacyEmail", "supportEmail"]) {
-  if (typeof config[key] !== "string" || !email.test(config[key])) missing.push(key);
-}
-const date = new Date(config.effectiveDate);
-if (!/^\d{4}-\d{2}-\d{2}$/.test(config.effectiveDate ?? "") || Number.isNaN(date.valueOf()) || date.toISOString().slice(0, 10) !== config.effectiveDate) missing.push("effectiveDate");
-if (!Array.isArray(config.launchMarkets) || !config.launchMarkets.length || config.launchMarkets.some(x => typeof x !== "string" || !x.trim())) missing.push("launchMarkets");
-if (config.publicationReady !== true) missing.push("publicationReady");
+const missing = missingOperatorFields(config);
 if (publish && missing.length) {
   throw new Error(`Legal publication blocked. Complete and verify docs/legal/operator.json: ${missing.join(", ")}. No public files were written.`);
 }
+await syncLegalBundle();
 const output = path.join(project, publish ? "public/legal" : ".tools/legal-preview");
 await mkdir(output, { recursive: true });
 const fields = {

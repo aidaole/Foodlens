@@ -11,10 +11,11 @@ FoodLens reads food packaging photos to extract ingredients and nutrition inform
 No FoodLens login or credentials are needed. The current preview interface is in Simplified Chinese.
 
 1. Swipe or use Next through onboarding, optionally select nutrition interests, then choose Start taking photos (开始拍照). Skip (跳过) is available.
+   A separate legal-document acknowledgment follows onboarding, including when Skip is used. Documents open without prior acknowledgment, include English text, and are bundled for offline reading. The current 0.4.3 preview labels them as drafts and records reading acknowledgment only. A store build must use verified active operator details and its final agreement wording. Upgrades preserve records but require acknowledgment when document content changes.
 2. Open Camera (打开相机) or Upload from album (相册上传), select a clear food-label image, crop it, and confirm the crop.
 3. On the first upload, a disclosure identifies Cloudflare Workers AI and asks permission. Agree and recognize (同意并识别) sends the image; Not now (先不发送) cancels cloud processing. No image is sent by granting camera permission alone.
 4. The result presents extracted ingredients, nutrition values, source evidence, missing-data notices, and educational reminders. Check serving size and original packaging. Example products are fictional and labeled as examples.
-5. History (记录) and My (我的) are bottom tabs. My stores dietary/allergy preferences locally and has Clear local data (清除本地数据), which clears saved app data and resets cloud consent.
+5. History (记录) and My (我的) are bottom tabs. My → Agreements and privacy (协议与隐私) opens Terms, Privacy, Health Notice and Support. Turn off cloud recognition (关闭云端识别授权) stops future uploads without deleting history; the next upload asks again. Clear local data (清除本地数据) clears saved app data and resets cloud consent and legal acknowledgment, retaining onboarding completion.
 
 If cloud recognition is unavailable, Try the examples (先体验示例) lets the reviewer inspect the result UI without a request. This is a clearly labeled demonstration, not a substitute for an available production backend. Before submission, provision sufficient real recognition capacity for reviewers; the current shared preview service is limited to 25 recognition reservations per UTC day and 16 per source summary/session per day. Reaching that limit can prevent review of the cloud feature.
 

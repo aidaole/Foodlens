@@ -20,7 +20,7 @@ We do not use your photos or results for advertising or model training. Cloudfla
 
 The app saves your selected nutrition interests, dietary concerns, and allergy preferences on your device. These settings are used locally to organize results and display reminders and are not included in recognition requests.
 
-Recognition history, extracted label text, nutrition results, compressed label thumbnails, favorites, the onboarding status, and your cloud-consent setting are also saved locally. The app retains up to 50 history entries and up to 50 recognized foods with their thumbnails; older entries are replaced as new entries are added. There is no FoodLens cloud backup or synchronization of this history.
+Recognition history, extracted label text, nutrition results, compressed label thumbnails, favorites, the onboarding status, your cloud-consent setting, and the version and time of your legal-document acknowledgment are also saved locally. The app retains up to 50 history entries and up to 50 recognized foods with their thumbnails; older entries are replaced as new entries are added. There is no FoodLens cloud backup or synchronization of this history.
 
 Local app storage is not separately encrypted by FoodLens. Device security, operating-system backups, and temporary photo files are controlled by your device and operating system. Other people with access to an unlocked or shared device may be able to view your saved information.
 
@@ -48,7 +48,9 @@ We do not provide your locally stored dietary settings or history to a service p
 
 You can deny camera permission and use the photo picker, deny image access and use the examples, or decline the cloud-recognition prompt. You can change permissions in your device settings at any time.
 
-In the app, open My (我的), select Clear local data (清除本地数据), and confirm. This removes saved history, recognized foods, thumbnails, favorites, and dietary preferences from the app's saved state, and resets cloud consent. It keeps the onboarding-completed flag. The app will ask for agreement again before another cloud upload. Stop submitting photos if you want to stop cloud processing. Clearing local data does not retract a completed request, delete usage counters on our server, or necessarily delete operating-system photo caches or backups.
+You can withdraw permission for future uploads in My (我的) → Agreements and privacy (协议与隐私) → Turn off cloud recognition (关闭云端识别授权). Existing records remain, and the next upload will ask again. This does not retract completed or already-sent requests.
+
+In the app, open My (我的), select Clear local data (清除本地数据), and confirm. This removes saved history, recognized foods, thumbnails, favorites, and dietary preferences from the app's saved state, and resets cloud consent and the legal-document acknowledgment. It keeps the onboarding-completed flag. The app will ask for agreement again before another cloud upload. Stop submitting photos if you want to stop cloud processing. Clearing local data does not retract a completed request, delete usage counters on our server, or necessarily delete operating-system photo caches or backups.
 
 There is currently no FoodLens account to delete. We cannot read or remotely recover history stored only on your device. To request access to or deletion of information we hold, contact [{{privacyEmail}}](mailto:{{privacyEmail}}). We may ask for the minimum information needed to verify and locate your request; we do not need your account password or identity-document number. Because we do not maintain a named account database, we may not be able to associate a request with a particular usage counter without additional information.
 
