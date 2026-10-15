@@ -2,7 +2,7 @@
 
 React Native + Expo + TypeScript 食品标签解读 MVP。iOS、Android 和浏览器共用界面与营养规则。
 
-## 最新代码调整
+## 0.4.1 更新
 
 应用图标移除右下角勾选标记；记录中的标签照片按原始比例显示，并直接对照片边缘做12px圆角裁切。
 
@@ -95,7 +95,7 @@ npx expo export --platform all
 
 ## Android APK 体验包
 
-当前体验版为 `outputs/FoodLens-0.4.0-preview.apk`（versionCode 7），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
+当前体验版为 `outputs/FoodLens-0.4.1-preview.apk`（versionCode 8），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
 
 签名校验通过，在 API36 ARM64 模拟器安装与冷启动成功；启动后进程保持运行，没有 ReactNativeJS/AndroidRuntime 错误日志。手机相机仍需用户在真机体验。
 
