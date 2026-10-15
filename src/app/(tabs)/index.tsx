@@ -93,8 +93,7 @@ export default function Scan() {
     const controller = new AbortController();
     request.current = controller;
     try {
-      let thumbnail: string | undefined;
-      const food = await recognizePhoto(p, controller.signal, setStage, setUploadInfo, uri => { thumbnail = uri; });
+      const { food, thumbnail } = await recognizePhoto(p, controller.signal, setStage, setUploadInfo);
       if (controller.signal.aborted) return;
       store.saveRecognition(food, thumbnail);
       router.push({ pathname: "/result", params: { id: food.id } });

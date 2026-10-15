@@ -2,6 +2,12 @@
 
 React Native + Expo + TypeScript 食品标签解读 MVP。iOS、Android 和浏览器共用界面与营养规则。
 
+## 0.4.2 更新
+
+修复新拍照识别成功后，记录仍可能显示默认图的问题：在上传前从仍有效的图片引用生成本地JPEG缩略图，并与对应食品结果一起保存。超过16,000字符时继续降低缩略图尺寸，不再直接丢弃；图片引用不可用时使用实际上传JPEG重试。列表从JPEG头读取比例，尺寸读取失败不再把可显示的照片误换成默认图；图片按原比例显示并保留12px圆角。
+
+旧版已保存的缩略图与偏好继续保留。历史记录当时没有保存照片的，无法自动补回，继续使用默认包装图；新拍照/相册识别会保留对应照片。缩略图只存本机，清除本地数据时一起删除。
+
 ## 0.4.1 更新
 
 应用图标移除右下角勾选标记；记录中的标签照片按原始比例显示，并直接对照片边缘做12px圆角裁切。
@@ -96,7 +102,7 @@ npx expo export --platform all
 
 ## Android APK 体验包
 
-当前体验版为 `outputs/FoodLens-0.4.1-preview.apk`（versionCode 8），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
+当前体验版为 `outputs/FoodLens-0.4.2-preview.apk`（versionCode 9），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
 
 签名校验通过，在 API36 ARM64 模拟器安装与冷启动成功；启动后进程保持运行，没有 ReactNativeJS/AndroidRuntime 错误日志。手机相机仍需用户在真机体验。
 

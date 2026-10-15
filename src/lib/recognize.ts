@@ -1,10 +1,10 @@
-import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
+import { ImageManipulator, SaveFormat, type ImageRef } from "expo-image-manipulator";
 import { isCloudFood } from "./recognition-schema";
 import type { Food } from "./food";
 import type { Photo } from "../components/PhotoCrop";
 import { compressLabelPhoto, type UploadInfo } from "./photo-compression";
 import { RecognitionError, requestJson, connectService, prepareWithinDeadline, CONNECTION_TIMEOUT_MS, MODEL_TIMEOUT_MS, type RecognitionStage } from "./recognition-network";
-import { isHistoryThumbnail } from "./history-thumbnail";
+import { compressHistoryThumbnail } from "./history-thumbnail";
 export type { UploadInfo } from "./photo-compression";
 export { RecognitionError } from "./recognition-network";
 const endpoint = (process.env.EXPO_PUBLIC_RECOGNITION_URL ?? "").replace(
@@ -42,7 +42,7 @@ async function encodePhoto(photo: Photo, signal: AbortSignal) {
   let image: Awaited<ReturnType<ReturnType<typeof ImageManipulator.manipulate>["renderAsync"]>> | undefined;
   let size = "";
   try {
-    return await compressLabelPhoto(photo.width, photo.height, async (plan) => {
+    const encoded = await compressLabelPhoto(photo.width, photo.height, async (plan) => {
       const nextSize = plan.width + "x" + plan.height;
       if (!image || size !== nextSize) {
         image?.release(); image = undefined;
@@ -56,6 +56,19 @@ async function encodePhoto(photo: Photo, signal: AbortSignal) {
       const saved = await image.saveAsync({format:SaveFormat.JPEG, compress:plan.quality, base64:true});
       return {uri:saved.uri, width:saved.width, height:saved.height, base64:saved.base64 ?? ""};
     }, signal);
+    // Keep the rendered photo alive until its local thumbnail is encoded. Native
+    // camera/cache files must not be reopened after a potentially long AI request.
+    let thumbnail: string | undefined;
+    try {
+      if (image) thumbnail = await historyThumbnail(image, signal);
+    } catch { /* Try the immutable upload below if the native ref is unavailable. */ }
+    if (!thumbnail && !signal.aborted) {
+      // Also retry when the ref supplied no usable dimensions or thumbnail data.
+      try {
+        thumbnail = await historyThumbnail("data:image/jpeg;base64," + encoded.base64, signal, encoded.width, encoded.height);
+      } catch { /* A genuine local image failure does not invalidate the label. */ }
+    }
+    return { ...encoded, thumbnail };
   } catch (error) {
     if (error instanceof RecognitionError) throw error;
     throw new RecognitionError("图片读取失败，请重新选图或裁剪。", "IMAGE");
@@ -64,31 +77,34 @@ async function encodePhoto(photo: Photo, signal: AbortSignal) {
     ctx?.release();
   }
 }
-async function historyThumbnail(uri: string): Promise<string | undefined> {
-  const ctx = ImageManipulator.manipulate(uri);
-  let image: Awaited<ReturnType<typeof ctx.renderAsync>> | undefined;
+async function historyThumbnail(source: ImageRef | string, signal: AbortSignal, width?: number, height?: number): Promise<string | undefined> {
+  const sourceWidth = typeof source === "string" ? width! : source.width;
+  const sourceHeight = typeof source === "string" ? height! : source.height;
+  let ctx: ReturnType<typeof ImageManipulator.manipulate> | undefined;
+  let size = "";
+  let image: ImageRef | undefined;
   try {
-    // Preserve the whole label, even for portrait/landscape crops.
-    const original = await ctx.renderAsync();
-    const scale = Math.min(1, 240 / Math.max(original.width,original.height));
-    const w = Math.max(1,Math.round(original.width*scale)), h = Math.max(1,Math.round(original.height*scale));
-    original.release();
-    ctx.resize({width:w,height:h});
-    image = await ctx.renderAsync();
-    for (const quality of [0.68,0.45]) {
-      const saved = await image.saveAsync({format:SaveFormat.JPEG,compress:quality,base64:true});
-      const uri = "data:image/jpeg;base64," + (saved.base64 ?? "");
-      if (isHistoryThumbnail(uri)) return uri;
-    }
-  } finally { image?.release(); ctx.release(); }
+    return await compressHistoryThumbnail(sourceWidth, sourceHeight, async plan => {
+      const nextSize = plan.width + "x" + plan.height;
+      if (!image || size !== nextSize) {
+        image?.release(); image = undefined;
+        ctx?.release(); ctx = undefined;
+        ctx = ImageManipulator.manipulate(source);
+        ctx.resize({width:plan.width,height:plan.height});
+        image = await ctx.renderAsync();
+        size = nextSize;
+      }
+      const saved = await image.saveAsync({format:SaveFormat.JPEG,compress:plan.quality,base64:true});
+      return saved.base64 ?? "";
+    }, signal);
+  } finally { image?.release(); ctx?.release(); }
 }
 export async function recognizePhoto(
   photo: Photo,
   signal: AbortSignal,
   onStage?: (stage: RecognitionStage) => void,
   onPrepared?: (info: UploadInfo) => void,
-  onThumbnail?: (uri: string) => void,
-): Promise<Food> {
+): Promise<{ food: Food; thumbnail?: string }> {
   if (!cloudConfigured)
     throw new RecognitionError(
       "云端识别还在等待账号接通。你可以先体验拍照、裁剪和示例分析。",
@@ -117,12 +133,8 @@ export async function recognizePhoto(
     }
     if (!isCloudFood(data?.food))
       throw new RecognitionError("识别数据不完整，请重新拍摄。", "RETAKE");
-    try {
-      const thumbnail = await prepareWithinDeadline(historyThumbnail(encoded.uri ?? body.image), signal, 5000);
-      if (thumbnail) onThumbnail?.(thumbnail);
-    } catch { /* Recognition remains usable when a local thumbnail cannot be made. */ }
     if (signal.aborted) throw new RecognitionError("已取消识别，照片已保留。", "CANCELED");
-    return data.food;
+    return { food: data.food, thumbnail: encoded.thumbnail };
   } catch (error) {
     if (signal.aborted)
       throw new RecognitionError(

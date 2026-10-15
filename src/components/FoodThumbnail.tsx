@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Image, View } from "react-native";
 import { C, Pack } from "./ui";
 import type { Food } from "../lib/food";
+import { thumbnailDimensions } from "../lib/history-thumbnail";
 
 export function FoodThumbnail({ food, uri }: { food: Food; uri?: string }) {
   const [failedUri, setFailedUri] = useState<string>();
-  const [size, setSize] = useState<{ uri: string; aspect: number }>();
-  useEffect(() => {
-    if (!uri) return;
-    let active = true;
-    Image.getSize(uri, (width, height) => {
-      if (active && width > 0 && height > 0)
-        setSize({ uri, aspect: width / height });
-    }, () => { if (active) setFailedUri(uri); });
-    return () => { active = false; };
-  }, [uri]);
+  const size = useMemo(() => thumbnailDimensions(uri), [uri]);
   const showPhoto = !!uri && failedUri !== uri;
-  const aspect = size && size.uri === uri ? size.aspect : 79 / 92;
+  const aspect = size ? size.width / size.height : 79 / 92;
   const width = Math.min(79, 92 * aspect);
   const height = Math.min(92, 79 / aspect);
 
@@ -37,7 +29,7 @@ export function FoodThumbnail({ food, uri }: { food: Food; uri?: string }) {
           <Image
             accessibilityLabel={food.name + "的标签缩略图"}
             source={{ uri }}
-            resizeMode="contain"
+            resizeMode={size ? "cover" : "contain"}
             style={{ width: "100%", height: "100%", borderRadius: 12 }}
             onError={() => setFailedUri(uri)}
           />

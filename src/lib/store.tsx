@@ -10,9 +10,9 @@ import { type Profile, type Food } from "./food";
 import {
   emptyState,
   restoreState,
+  appendRecognition,
   type PersistedState,
 } from "./persisted-state";
-import { restoreThumbnails } from "./history-thumbnail";
 export type { RecordItem } from "./persisted-state";
 const KEY = "foodlens.m1";
 type Store = PersistedState & {
@@ -70,25 +70,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     }));
   const allowCloud = () => setState((s) => ({ ...s, cloudConsent: true }));
   const saveRecognition = (food: Food, thumbnail?: string) =>
-    setState((s) => {
-      const recognized = [
-        food,
-        ...s.recognized.filter((f) => f.id !== food.id),
-      ].slice(0, 50);
-      const ids = new Set(recognized.map((f) => f.id));
-      return {
-        ...s,
-        recognized,
-        thumbnails: restoreThumbnails({...s.thumbnails, [food.id]:thumbnail}, [...ids]),
-        saved: s.saved.filter((id) => !id.startsWith("scan-") || ids.has(id)),
-        history: [
-          { id: food.id, foodId: food.id, date: new Date().toISOString() },
-          ...s.history,
-        ]
-          .filter((r) => !r.foodId.startsWith("scan-") || ids.has(r.foodId))
-          .slice(0, 50),
-      };
-    });
+    setState(s => appendRecognition(s, food, thumbnail));
   const clear = () =>
     setState((s) => ({ ...emptyState(), onboarded: s.onboarded }));
   const completeOnboarding = () => setState((s) => ({ ...s, onboarded: true }));

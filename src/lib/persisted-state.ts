@@ -1,6 +1,6 @@
 import type { Profile, Food } from "./food";
 import { isCloudFood } from "./recognition-schema.ts";
-import { restoreThumbnails } from "./history-thumbnail.ts";
+import { restoreThumbnails, isHistoryThumbnail } from "./history-thumbnail.ts";
 import { validInterests } from "./nutrition-interests.ts";
 export type RecordItem = { id: string; foodId: string; date: string };
 export type PersistedState = {
@@ -21,6 +21,22 @@ export const emptyState = (): PersistedState => ({
   cloudConsent: false,
   thumbnails: {},
 });
+export function appendRecognition(state: PersistedState, food: Food, thumbnail?: string): PersistedState {
+  const recognized = [food, ...state.recognized.filter(f => f.id !== food.id)].slice(0, 50);
+  const ids = new Set(recognized.map(f => f.id));
+  const thumbnails = { ...state.thumbnails };
+  // Saving a result without a new image must not erase an existing valid photo.
+  if (isHistoryThumbnail(thumbnail)) thumbnails[food.id] = thumbnail;
+  return {
+    ...state,
+    recognized,
+    thumbnails: restoreThumbnails(thumbnails, [...ids]),
+    saved: state.saved.filter(id => !id.startsWith("scan-") || ids.has(id)),
+    history: [{ id: food.id, foodId: food.id, date: new Date().toISOString() }, ...state.history]
+      .filter(r => !r.foodId.startsWith("scan-") || ids.has(r.foodId))
+      .slice(0, 50),
+  };
+}
 const strings = (v: unknown): v is string[] =>
   Array.isArray(v) && v.every((x) => typeof x === "string");
 export function restoreState(value: unknown): PersistedState {
