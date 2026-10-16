@@ -53,7 +53,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "食刻没有单独加密本地应用存储。设备安全、操作系统备份和照片临时文件由设备及系统管理。可使用解锁设备或共享设备的人可能看到你的记录和设置。"
+          "text": "食刻没有单独加密照片历史和偏好存储；原生使用身份凭证使用系统安全存储。设备安全、操作系统备份和照片临时文件由设备及系统管理。可使用解锁设备或共享设备的人可能看到你的记录和设置。"
         },
         {
           "kind": "heading",
@@ -70,6 +70,22 @@
         {
           "kind": "paragraph",
           "text": "食刻不请求定位、通讯录或麦克风权限，未接入广告或分析 SDK，不使用广告标识符，不出售个人信息，也不为跨场景行为广告分享信息。应用未接入 Apple HealthKit 或 Android Health Connect。"
+        },
+        {
+          "kind": "heading",
+          "text": "体验身份与识别额度"
+        },
+        {
+          "kind": "paragraph",
+          "text": "打开会员页或使用新版真实识别时，服务器生成一个随机使用身份，并向应用返回校验凭证。原生应用使用系统安全存储保存凭证，网页版本保存在浏览器本地存储。清除照片历史和饮食设置不会清除身份或重置额度；卸载、设备迁移或浏览器清理可能丢失身份。当前不要求注册，也没有跨平台账号同步。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "服务器按身份保存累计免费成功识别次数，并为正在处理的请求保留最长十分钟的预约。免费体验累计三次，不按月重置。预约结束后仅成功识别计次，失败或重拍会释放预约；超时未结束的预约会失效。服务端完成但手机未收到结果的请求可能计次。这些记录不包含标签照片、OCR 正文或饮食偏好，也不随清除本地记录自动删除。当前累计计数不会自动按日清除，会为额度核验和防滥用持续保留；可通过隐私邮箱提出适用权利请求。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "正式订阅功能启用后，应用将同一使用身份交给 RevenueCat，商店及 RevenueCat 处理购买凭证、交易标识、会员权益、续订、到期及退款状态和其 SDK 实际发送的运行信息。Cloudflare 后台查询会员状态，并按商店交易生成密钥摘要，保存订阅周期时间及成功识别次数，避免恢复购买重复获得额度。不会把标签照片、营养结果、饮食关注或过敏偏好作为 RevenueCat 用户属性发送。当前购买开关关闭，未初始化 RevenueCat 购买服务；启用前须定稿政策、核实 SDK 数据披露与保留设置。"
         },
         {
           "kind": "heading",
@@ -145,7 +161,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "信息处理方式变化时会更新政策和生效日期。新增账号、订阅、分析或云端历史等实质变化，将在新处理开始前说明，并在适用法律要求时另行征求同意。当前未接入 RevenueCat 或支付服务。"
+          "text": "信息处理方式变化时会更新政策和生效日期。新增账号、订阅、分析或云端历史等实质变化，将在新处理开始前说明，并在适用法律要求时另行征求同意。当前未开放支付，也未初始化 RevenueCat 购买服务；计划中的订阅数据处理见上述说明。"
         },
         {
           "kind": "heading",
@@ -215,7 +231,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "Local app storage is not separately encrypted by FoodLens. Device security, operating-system backups, and temporary photo files are controlled by your device and operating system. Other people with access to an unlocked or shared device may be able to view your saved information."
+          "text": "Photo history and preference storage are not separately encrypted by FoodLens. Native usage-identity credentials use operating-system secure storage. Device security, operating-system backups, and temporary photo files are controlled by your device and operating system. Other people with access to an unlocked or shared device may be able to view your saved information."
         },
         {
           "kind": "heading",
@@ -232,6 +248,22 @@
         {
           "kind": "paragraph",
           "text": "The app does not request location, contacts, or microphone access. It has no advertising or analytics SDK and does not use advertising identifiers, sell personal information, or share it for cross-context behavioral advertising. FoodLens does not connect to Apple HealthKit or Android Health Connect."
+        },
+        {
+          "kind": "heading",
+          "text": "Usage identity and recognition allowance"
+        },
+        {
+          "kind": "paragraph",
+          "text": "When you open the membership screen or use the new recognition flow, the server issues a random usage identity and its verification credential. The native app saves the credential in operating-system secure storage; the web app saves it in local browser storage. Clearing photo history or dietary preferences does not clear this identity or reset allowance. Uninstalling, changing devices or clearing browser storage can lose it. No registration or cross-platform account synchronization is required in this version."
+        },
+        {
+          "kind": "paragraph",
+          "text": "The server records cumulative successful free recognitions per identity and keeps an in-flight reservation for at most ten minutes. Free use allows three successful recognitions in total, without monthly resets. Success consumes allowance; failures and retake requests release reservations. An abandoned reservation expires. A request that completes on the server can count even if your phone does not receive its result. These records contain no label photos, OCR text or dietary preferences and are not deleted by clearing local history. Cumulative usage records currently have no daily automatic deletion and are retained for allowance verification and abuse prevention. Contact the privacy address to exercise applicable rights."
+        },
+        {
+          "kind": "paragraph",
+          "text": "When real subscriptions are enabled, the app will identify the same usage identity to RevenueCat. Stores and RevenueCat process purchase receipts, transaction identifiers, entitlements, renewal, expiry and refund status and information actually sent by their SDK. The Cloudflare backend checks entitlement and uses a keyed store-transaction summary to track billing-period dates and recognition counts, preventing restoration from granting the same allowance again. Label photos, nutrition results, dietary concerns and allergies are not sent as RevenueCat customer attributes. Purchases are currently disabled and the RevenueCat purchase service is not initialized. Before activation, the policy, SDK disclosures and provider retention settings must be finalized."
         },
         {
           "kind": "heading",
@@ -307,7 +339,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "We will update this policy when our practices change and update the effective date. Material changes, such as adding accounts, subscriptions, analytics, or cloud history, will be explained before the new processing begins, with consent where required. The current policy does not describe a RevenueCat or payment integration because it is not active in this version."
+          "text": "We will update this policy when our practices change and update the effective date. Material changes, such as adding accounts, subscriptions, analytics, or cloud history, will be explained before the new processing begins, with consent where required. The current version does not enable payments or initialize RevenueCat purchases. Planned subscription information handling is described above."
         },
         {
           "kind": "heading",
@@ -633,7 +665,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "当前体验版没有付费订阅。将来若推出订阅，购买前会显示商店价格、周期、权益、限额及续订条件。取消应在商店订阅设置中操作，卸载不取消商店收费。"
+          "text": "当前体验版尚未开放付费购买。新版免费身份累计可成功识别三次；「我的 → FoodLens Pro 月会员」可查看额度及月会员方案。清除本地数据不会重置服务器的次数，也不清除使用身份凭证。将来若推出订阅，购买前会显示商店价格、周期、权益、限额及续订条件。取消应在商店订阅设置中操作，卸载不取消商店收费。"
         },
         {
           "kind": "heading",
@@ -699,7 +731,7 @@
         },
         {
           "kind": "paragraph",
-          "text": "The current preview has no paid subscription. If a future version offers a subscription, its purchase screen will show the store price, billing period, benefits, usage limits, and renewal conditions before confirmation. Store subscription settings control cancellation; deleting the app does not cancel store billing."
+          "text": "Purchases are not enabled in this preview. The new free-use identity has three successful recognitions in total. My → FoodLens Pro Monthly opens allowance and plan information. Clearing local history does not reset server allowance or clear the usage credential. If a future version offers a subscription, its purchase screen will show the store price, billing period, benefits, usage limits, and renewal conditions before confirmation. Store subscription settings control cancellation; deleting the app does not cancel store billing."
         },
         {
           "kind": "heading",
@@ -816,7 +848,165 @@
           "text": "See the [Terms of Use](terms.html) and [Privacy Policy](privacy.html)."
         }
       ]
+    },
+    "subscription": {
+      "zh": [
+        {
+          "kind": "title",
+          "text": "FoodLens Pro 月会员订阅条款"
+        },
+        {
+          "kind": "paragraph",
+          "text": "本方案正在准备，当前体验版尚未开放购买，不会扣款。生效日期：待确认。运营主体：待确认，客服邮箱：[待确认](mailto:待确认)。"
+        },
+        {
+          "kind": "heading",
+          "text": "月会员方案"
+        },
+        {
+          "kind": "paragraph",
+          "text": "FoodLens Pro 采用每月自动续订。方案参考价为人民币 ¥9.90，海外商店按当地货币显示实际价格；订阅页面及商店确认框显示的价格、币种、周期和税费为购买依据。本方案不提供年付选项或免费试用期。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "免费用户每个匿名使用身份累计可成功识别 3 次，不按月重置。月会员每个有效订阅周期可成功识别 50 次；成功续订后开始新周期，未用次数不结转，不能兑换现金。示例分析不消耗次数。识别失败或需要重拍不扣套餐次数。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "次数由服务器记录，清除本地照片或历史不会重置。如果请求已发出，后台成功完成后，即使手机断网、取消等待或未收到结果，也可能计次。服务临时不可用时不会扣套餐次数；如遇已扣次数但未收到结果，可联系客服核查。"
+        },
+        {
+          "kind": "heading",
+          "text": "购买、生效与付款状态"
+        },
+        {
+          "kind": "paragraph",
+          "text": "购买通过 Apple 或 Google 的应用内支付完成，商店处理扣款，食刻不接收完整银行卡信息。会员在商店确认支付并由后台核验后生效。待批准、支付失败或用户取消不视为购买成功，请勿因等待确认而重复购买。"
+        },
+        {
+          "kind": "heading",
+          "text": "续订、取消与退款"
+        },
+        {
+          "kind": "paragraph",
+          "text": "订阅将按商店规则自动续订并扣款，除非你在商店要求的截止时间前取消。续订日期、价格变更及必要确认以商店通知和订阅设置为准。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "在「我的会员 → 管理订阅」可打开对应商店的订阅设置。取消通常停止下一次续费，已付费周期按商店规则保留权益。卸载、清除本地数据或删除未来账号都不会自动取消商店订阅。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "退款可使用 [Apple 退款入口](https://support.apple.com/118223) 或 [Google Play 退款流程](https://support.google.com/googleplay/answer/2479637?hl=en)，按商店规则及适用法律处理。联系食刻可协助核查权益问题，本条款不限制法定退款或消费者权利。"
+        },
+        {
+          "kind": "heading",
+          "text": "恢复购买与身份"
+        },
+        {
+          "kind": "paragraph",
+          "text": "可在原购买平台使用同一个商店账号恢复购买。恢复需依商店和 RevenueCat 的恢复或转移设置核验，不会因为点击恢复而赠送新周期的 50 次。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "首版无需注册食刻账号。后台生成随机使用身份，应用保存其凭证，并将同一身份用于已配置的会员核验。Android 与 iOS 的匿名身份不会自动互通，也不会同步照片历史。身份丢失、更换设备或重新安装可能需要恢复购买；不要向他人分享身份凭证。"
+        },
+        {
+          "kind": "heading",
+          "text": "服务范围与数据"
+        },
+        {
+          "kind": "paragraph",
+          "text": "月会员增加真实标签识别次数，不提供医疗诊断、过敏安全保证、临床验证或绝对准确率。请核对原包装并遵循医疗专业人员建议。识别受网络、模型服务及防滥用限流影响。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "在正式购买功能启用后，RevenueCat 将协助校验商店交易、续订、到期、退款及会员权益。付款前需使用反映已启用服务及实际数据处理的正式 [隐私政策](privacy.html) 和 [用户协议](terms.html)。照片及饮食偏好不会作为 RevenueCat 用户属性上传。"
+        },
+        {
+          "kind": "paragraph",
+          "text": "运营主体和公开邮箱尚待确认时，本文件仅为方案草案。真实商店商品、服务容量、身份恢复和支付流程通过验证后才开放购买。"
+        }
+      ],
+      "en": [
+        {
+          "kind": "title",
+          "text": "FoodLens Pro Monthly Subscription Terms"
+        },
+        {
+          "kind": "paragraph",
+          "text": "This plan is being prepared. Purchases are not enabled in the current preview and it cannot charge you. Effective date: Pending confirmation. Operator: Pending confirmation. Support: [Pending confirmation](mailto:Pending confirmation)."
+        },
+        {
+          "kind": "heading",
+          "text": "Monthly plan"
+        },
+        {
+          "kind": "paragraph",
+          "text": "FoodLens Pro renews monthly. The proposed reference price is CNY 9.90. Overseas stores display their actual localized currency and price; the purchase screen and store confirmation identify the applicable price, currency, billing period and taxes. This plan has no annual option or free subscription trial."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Each anonymous free-use identity receives three successful recognitions in total, without a monthly reset. An active monthly subscription includes 50 successful recognitions per subscription period. A successful renewal starts a new period. Unused recognitions do not carry over or have cash value. Examples use no allowance. Failed recognitions and retake requests do not consume plan allowance."
+        },
+        {
+          "kind": "paragraph",
+          "text": "The server records usage, so deleting local photos or history does not reset it. An already-sent request can count if it completes successfully on the server, even if your phone loses its connection, you stop waiting, or you do not receive the result. Service unavailability does not consume plan allowance. Contact support if a completed request consumed allowance without delivering a result."
+        },
+        {
+          "kind": "heading",
+          "text": "Purchase and activation"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Apple or Google processes payment through its in-app purchase system. FoodLens does not receive full payment-card details. Access begins after store payment confirmation and backend verification. Pending approval, failed payments and canceled purchases do not activate a subscription. Do not purchase again merely because a confirmation is delayed."
+        },
+        {
+          "kind": "heading",
+          "text": "Renewal, cancellation and refunds"
+        },
+        {
+          "kind": "paragraph",
+          "text": "The store renews and charges your subscription unless you cancel by its applicable deadline. Renewal dates, price changes and any required confirmation follow the store's notices and subscription settings."
+        },
+        {
+          "kind": "paragraph",
+          "text": "My membership → Manage subscription opens the relevant store settings. Cancellation generally stops the next renewal and retains access during the paid period, subject to store rules. Uninstalling, clearing app data or deleting a future account does not cancel store billing."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Request refunds through [Apple](https://support.apple.com/118223) or [Google Play](https://support.google.com/googleplay/answer/2479637?hl=en), subject to store rules and applicable law. FoodLens support can help investigate access problems. These terms do not limit statutory consumer or refund rights."
+        },
+        {
+          "kind": "heading",
+          "text": "Restoring purchases and identity"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Restore on the original purchase platform with the same store account, subject to configured store and RevenueCat restoration and transfer rules. Restoration does not grant a fresh allowance for the same billing period."
+        },
+        {
+          "kind": "paragraph",
+          "text": "The first version does not require a FoodLens registration. The server issues a random usage identity, whose credential is saved by the app and used for configured subscription verification. Anonymous Android and iOS identities do not automatically share subscriptions or synchronize photo history. A lost identity, reinstall or replacement device may require purchase restoration. Do not share your credential."
+        },
+        {
+          "kind": "heading",
+          "text": "Service and information handling"
+        },
+        {
+          "kind": "paragraph",
+          "text": "Pro increases real label-recognition allowance. It does not provide medical diagnosis, allergen safety certification, clinical validation or guaranteed accuracy. Check original packaging and seek professional medical advice. Recognition depends on networks, model availability and anti-abuse limits."
+        },
+        {
+          "kind": "paragraph",
+          "text": "When real purchases are enabled, RevenueCat helps verify store transactions, renewals, expiration, refunds and entitlements. Purchase must use an active [Privacy Policy](privacy.html) and [Terms of Use](terms.html) reflecting the configured providers and processing. Label photos and dietary preferences are not sent as RevenueCat customer attributes."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Until operator identity and public contacts are confirmed, this document is a plan draft. Store products, service capacity, identity restoration and billing must be verified before purchase is enabled."
+        }
+      ]
     }
   },
-  "revision": "7da1a0e712a2ae797f85"
+  "revision": "c1bf0784c7578f860967"
 }

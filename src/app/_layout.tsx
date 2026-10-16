@@ -35,6 +35,7 @@ function Navigator() {
         <Stack.Screen name="result" />
         <Stack.Screen name="guide" />
         <Stack.Screen name="about" />
+        <Stack.Screen name="membership" />
       </Stack.Protected>
       <Stack.Protected guard={!onboarded}>
         <Stack.Screen name="onboarding" />

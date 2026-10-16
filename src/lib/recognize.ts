@@ -3,8 +3,9 @@ import { isCloudFood } from "./recognition-schema";
 import type { Food } from "./food";
 import type { Photo } from "../components/PhotoCrop";
 import { compressLabelPhoto, type UploadInfo } from "./photo-compression";
-import { RecognitionError, requestJson, connectService, prepareWithinDeadline, CONNECTION_TIMEOUT_MS, MODEL_TIMEOUT_MS, type RecognitionStage } from "./recognition-network";
+import { RecognitionError, requestJson, connectService, prepareWithinDeadline, MODEL_TIMEOUT_MS, type RecognitionStage } from "./recognition-network";
 import { compressHistoryThumbnail } from "./history-thumbnail";
+import { getIdentity } from './membership';
 export type { UploadInfo } from "./photo-compression";
 export { RecognitionError } from "./recognition-network";
 const endpoint = (process.env.EXPO_PUBLIC_RECOGNITION_URL ?? "").replace(
@@ -15,7 +16,6 @@ export const recognitionBrowserURL = endpoint;
 export const cloudConfigured =
   /^https:\/\//.test(endpoint) ||
   (__DEV__ && /^http:\/\/(localhost|127\.0\.0\.1):/.test(endpoint));
-let session: { token: string; expiresAt: number } | null = null;
 async function json(
   path: string,
   body: unknown,
@@ -24,18 +24,9 @@ async function json(
 ) {
   return requestJson(endpoint + path, {
     signal, body, token,
-    connection: path === "/v1/session",
-    timeoutMs: path === "/v1/session" ? CONNECTION_TIMEOUT_MS : MODEL_TIMEOUT_MS,
+    connection: false,
+    timeoutMs: MODEL_TIMEOUT_MS,
   });
-}
-async function getSession(signal: AbortSignal) {
-  if (session && session.expiresAt > Date.now() / 1000 + 30)
-    return session.token;
-  const s = await json("/v1/session", {}, signal);
-  if (typeof s?.token !== "string" || typeof s?.expiresAt !== "number")
-    throw new RecognitionError("连接未建立，请重试。", "SERVER");
-  session = { token: s.token, expiresAt: s.expiresAt };
-  return session.token;
 }
 async function encodePhoto(photo: Photo, signal: AbortSignal) {
   let ctx: ReturnType<typeof ImageManipulator.manipulate> | undefined;
@@ -119,18 +110,9 @@ export async function recognizePhoto(
   const body = { image:"data:image/jpeg;base64," + encoded.base64 };
   try {
     onStage?.("connecting");
-    let token = await getSession(signal);
+    const { token } = await getIdentity(signal);
     onStage?.("recognizing");
-    let data;
-    try {
-      data = await json("/v1/recognize", body, signal, token);
-    } catch (error) {
-      if (!(error instanceof RecognitionError) || error.code !== "SESSION")
-        throw error;
-      session = null;
-      token = await getSession(signal);
-      data = await json("/v1/recognize", body, signal, token);
-    }
+    const data = await json('/v2/recognize', body, signal, token);
     if (!isCloudFood(data?.food))
       throw new RecognitionError("识别数据不完整，请重新拍摄。", "RETAKE");
     if (signal.aborted) throw new RecognitionError("已取消识别，照片已保留。", "CANCELED");

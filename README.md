@@ -2,6 +2,10 @@
 
 React Native + Expo + TypeScript 食品标签解读 MVP。iOS、Android 和浏览器共用界面与营养规则。
 
+## 0.4.4 更新
+
+加入 FoodLens Pro 月会员准备版：人民币参考价 9.90 元/月，免费身份累计三次、会员每订阅周期五十次。会员页显示后台额度，新版识别服务按成功结果计次。购买/恢复代码及 RevenueCat SDK 已接入，但真实购买保持关闭，商店商品、账号配置、正式协议及支付测试尚未完成。详见 [版本记录](docs/release-0.4.4.md) 和 [月会员配置步骤](docs/monthly-subscription-setup.md)。
+
 ## 0.4.3 更新
 
 应用内加入中英文用户协议、隐私政策、健康说明与客服帮助，支持离线阅读。在我的、关于、首次引导和上传提示提供入口；完成引导后主动勾选阅读确认，升级保留历史并提示新文档。云端上传仍独立授权，可以单独关闭后续授权而保留历史。当前运营信息未齐，正文明确标为草案；不代表已完成上架或订阅接入。详见 [版本记录](docs/release-0.4.3.md)。
@@ -106,7 +110,7 @@ npx expo export --platform all
 
 ## Android APK 体验包
 
-当前体验版为 `outputs/FoodLens-0.4.3-preview.apk`（versionCode 10），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
+当前体验版为 `outputs/FoodLens-0.4.4-preview.apk`（versionCode 11），支持 Android7.0+ 的 arm64-v8a 与 armeabi-v7a。使用本地测试签名，应用代码内置，无需 Expo Go 或 Metro 服务器；真实识别需要联网。
 
 签名校验通过，在 API36 ARM64 模拟器安装与冷启动成功；启动后进程保持运行，没有 ReactNativeJS/AndroidRuntime 错误日志。手机相机仍需用户在真机体验。
 

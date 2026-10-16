@@ -236,6 +236,7 @@ export default function Scan() {
                 {error}
               </Text>
             )}
+            {['FREE_QUOTA', 'MEMBER_QUOTA'].includes(errorCode) && <Button tone="light" style={{ marginTop: 12 }} onPress={() => router.push('/membership')}>查看月会员与额度</Button>}
             {Platform.OS !== "web" && ["CONNECTION_TIMEOUT", "NETWORK"].includes(errorCode) && (
               <View style={{marginTop:12, gap:10}}>
                 <Button tone="light" showArrow={false} onPress={() => {

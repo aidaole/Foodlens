@@ -5,7 +5,7 @@ import { LegalLinks } from '../components/LegalLinks';
 export default function About() {
   return (
     <Shell title="关于食刻">
-      <Text style={s.eyebrow}>FOODLENS / VERSION 0.4.3</Text>
+      <Text style={s.eyebrow}>FOODLENS / VERSION 0.4.4</Text>
       <Text style={s.pageHeading}>让标签更好懂。</Text>
       <Text style={[s.body, { marginTop: 12 }]}>
         食刻是一个面向 iOS 与 Android 的食品标签解读 MVP。

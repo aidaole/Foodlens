@@ -22,7 +22,7 @@ FoodLens currently has no account and no remote history recovery. See the [Priva
 
 ## Payments
 
-The current preview has no paid subscription. If a future version offers a subscription, its purchase screen will show the store price, billing period, benefits, usage limits, and renewal conditions before confirmation. Store subscription settings control cancellation; deleting the app does not cancel store billing.
+Purchases are not enabled in this preview. The new free-use identity has three successful recognitions in total. My → FoodLens Pro Monthly opens allowance and plan information. Clearing local history does not reset server allowance or clear the usage credential. If a future version offers a subscription, its purchase screen will show the store price, billing period, benefits, usage limits, and renewal conditions before confirmation. Store subscription settings control cancellation; deleting the app does not cancel store billing.
 
 ## Health information
 

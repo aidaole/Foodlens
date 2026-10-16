@@ -22,7 +22,7 @@ The app saves your selected nutrition interests, dietary concerns, and allergy p
 
 Recognition history, extracted label text, nutrition results, compressed label thumbnails, favorites, the onboarding status, your cloud-consent setting, and the version and time of your legal-document acknowledgment are also saved locally. The app retains up to 50 history entries and up to 50 recognized foods with their thumbnails; older entries are replaced as new entries are added. There is no FoodLens cloud backup or synchronization of this history.
 
-Local app storage is not separately encrypted by FoodLens. Device security, operating-system backups, and temporary photo files are controlled by your device and operating system. Other people with access to an unlocked or shared device may be able to view your saved information.
+Photo history and preference storage are not separately encrypted by FoodLens. Native usage-identity credentials use operating-system secure storage. Device security, operating-system backups, and temporary photo files are controlled by your device and operating system. Other people with access to an unlocked or shared device may be able to view your saved information.
 
 ## Service security and usage limits
 
@@ -31,6 +31,14 @@ Requests to our service include a source IP address and standard network informa
 Session tokens expire after one hour. The usage-counter record for the current request day is replaced on the first recognition reservation on a later UTC day. If the service is idle, the previous counter record can remain until another request replaces it. Cloudflare may process or retain infrastructure and security information under its own applicable terms. We do not claim that all infrastructure information is deleted when a recognition response is delivered.
 
 The app does not request location, contacts, or microphone access. It has no advertising or analytics SDK and does not use advertising identifiers, sell personal information, or share it for cross-context behavioral advertising. FoodLens does not connect to Apple HealthKit or Android Health Connect.
+
+## Usage identity and recognition allowance
+
+When you open the membership screen or use the new recognition flow, the server issues a random usage identity and its verification credential. The native app saves the credential in operating-system secure storage; the web app saves it in local browser storage. Clearing photo history or dietary preferences does not clear this identity or reset allowance. Uninstalling, changing devices or clearing browser storage can lose it. No registration or cross-platform account synchronization is required in this version.
+
+The server records cumulative successful free recognitions per identity and keeps an in-flight reservation for at most ten minutes. Free use allows three successful recognitions in total, without monthly resets. Success consumes allowance; failures and retake requests release reservations. An abandoned reservation expires. A request that completes on the server can count even if your phone does not receive its result. These records contain no label photos, OCR text or dietary preferences and are not deleted by clearing local history. Cumulative usage records currently have no daily automatic deletion and are retained for allowance verification and abuse prevention. Contact the privacy address to exercise applicable rights.
+
+When real subscriptions are enabled, the app will identify the same usage identity to RevenueCat. Stores and RevenueCat process purchase receipts, transaction identifiers, entitlements, renewal, expiry and refund status and information actually sent by their SDK. The Cloudflare backend checks entitlement and uses a keyed store-transaction summary to track billing-period dates and recognition counts, preventing restoration from granting the same allowance again. Label photos, nutrition results, dietary concerns and allergies are not sent as RevenueCat customer attributes. Purchases are currently disabled and the RevenueCat purchase service is not initialized. Before activation, the policy, SDK disclosures and provider retention settings must be finalized.
 
 ## Support messages
 
@@ -68,7 +76,7 @@ FoodLens is not directed to children under 13. We do not knowingly collect perso
 
 We use HTTPS for recognition requests, signed short-lived session tokens, server-side validation, and usage limits. No system can guarantee absolute security; use your device's screen lock and review images before sending them.
 
-We will update this policy when our practices change and update the effective date. Material changes, such as adding accounts, subscriptions, analytics, or cloud history, will be explained before the new processing begins, with consent where required. The current policy does not describe a RevenueCat or payment integration because it is not active in this version.
+We will update this policy when our practices change and update the effective date. Material changes, such as adding accounts, subscriptions, analytics, or cloud history, will be explained before the new processing begins, with consent where required. The current version does not enable payments or initialize RevenueCat purchases. Planned subscription information handling is described above.
 
 ## Contact
 

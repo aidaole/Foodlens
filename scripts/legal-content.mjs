@@ -18,7 +18,7 @@ export function missingOperatorFields(config) {
 export async function createLegalBundle(config) {
   const active = missingOperatorFields(config).length === 0;
   const documents = {};
-  for (const [id, file] of Object.entries({ privacy: 'privacy-policy', terms: 'terms-of-use', support: 'support', health: 'health-notice' })) {
+  for (const [id, file] of Object.entries({ privacy: 'privacy-policy', terms: 'terms-of-use', support: 'support', health: 'health-notice', subscription: 'subscription-terms' })) {
     documents[id] = {};
     for (const lang of ['zh', 'en']) {
       const raw = await readFile(path.join(legalRoot, `${file}${lang === 'zh' ? '.zh' : ''}.md`), 'utf8');

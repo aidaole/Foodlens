@@ -42,6 +42,8 @@
     "DAILY_LIMIT": "25",
     "DEVICE_DAILY_LIMIT": "16",
     "MODEL_ENABLED": "true",
+    "BILLING_ENABLED": "false",
+    "ALLOW_SANDBOX_SUBSCRIPTIONS": "false",
     "ALLOWED_ORIGINS": "http://localhost:8081,https://foodlens-recognition.aidaole.workers.dev"
   },
   "observability": {

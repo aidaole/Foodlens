@@ -1,12 +1,12 @@
 # FoodLens Subscription Terms Draft
 
-Status: planned subscription version only. Do not publish or show as active terms in version 0.4.1. Prices, benefits, recognition limits, launch territories, and store product IDs have not been selected.
+Status: planned subscription version only. Do not show as active purchase terms in the current preview. The user selected CNY 9.90 monthly, three cumulative free recognitions and 50 successful recognitions per monthly subscription period. Launch territories and actual localized store prices remain to be configured. Consumer draft text is in subscription-terms.md and subscription-terms.zh.md.
 
 ## Offer details required before purchase
 
 The purchase screen must name the plan, show the actual localized store price and currency, state the billing period, and list the benefits and recognition allowance for that period. An annual total must be shown prominently even if a monthly equivalent is also displayed. Any daily or monthly usage limit, reset schedule, unused-allowance policy, and outage remedy must be clear before confirmation.
 
-Proposed structure: one FoodLens Pro entitlement with a monthly option and an annual option. This is a configuration proposal, not an approved offer. Do not advertise unlimited recognition under the current shared 25-request daily server budget. Define and implement paid capacity before selling it.
+Selected structure: one FoodLens Pro entitlement with a monthly option only. This is a configuration proposal, not an approved offer. Do not advertise unlimited recognition under the current shared 25-request daily server budget. Define and implement paid capacity before selling it.
 
 ## Customer subscription text
 
@@ -35,7 +35,7 @@ An anonymous subscription ID is still an identifier. It must not be described as
 ## Implementation and validation
 
 - Configure production store apps, agreements, payout/tax information, subscription products, prices, and sale territories before enabling real purchase buttons.
-- In App Store Connect, use a subscription group with monthly and annual products at the same intended entitlement level. In Google Play, configure subscriptions, base plans, and optional offers.
+- In App Store Connect, use a subscription group with one monthly product. In Google Play, configure subscriptions, base plans, and optional offers.
 - Connect both apps to RevenueCat and map products to the same intended Pro entitlement. Choose and test restoration/transfer behavior rather than accepting it without review.
 - Use native development/store test builds. Expo Go uses mock purchase APIs and cannot prove real billing works. See [RevenueCat's Expo setup](https://www.revenuecat.com/docs/getting-started/installation/expo).
 - Implement the purchase screen, restore action, manage action, pending/canceled/failed payment states, and accessible links to privacy and terms.

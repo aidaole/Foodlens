@@ -37,7 +37,7 @@ test('legacy installs retain their data but require a new acknowledgment; restor
 });
 test('revoking future photo consent retains history, preferences, and agreement acknowledgment', () => {
   const state = { ...emptyState(), cloudConsent: true, history: [{ id: 'old', foodId: 'oat', date: '2026-10-14' }], legalAcceptance: { revision: 'r', at: '2026-10-15' } };
-  assert.deepEqual(revokeCloudConsent(state), { ...state, cloudConsent: false });
+  assert.deepEqual(revokeCloudConsent(state), { ...state, cloudConsent: false, cloudConsentRevision: null });
 });
 test('legal links route internally, allow valid public links, and disable missing or unsafe destinations', () => {
   assert.deepEqual(legalLinkTarget('privacy.html'), { document: 'privacy' });

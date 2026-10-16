@@ -2,9 +2,11 @@ import {
   parseModelText,
   LabelError,
 } from "../../src/lib/recognition-schema.ts";
-import { issueSession, verifySession, sign } from "./auth.ts";
+import { issueSession, verifySession, sign, issueIdentity, verifyIdentity } from "./auth.ts";
 import { modelInput } from "./model-input.ts";
-export type Env = {
+import { billingAvailable, getSubscription, type BillingEnv } from './membership.ts';
+import { MONTHLY_PLAN } from '../../src/lib/membership-plan.ts';
+export type Env = BillingEnv & {
   ASSETS?: Fetcher;
   AI: {
     run: (model: string, input: Record<string, unknown>) => Promise<unknown>;
@@ -53,7 +55,7 @@ async function readJson(request: Request) {
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const path = new URL(request.url).pathname;
-    if (request.method === "GET" && path !== "/health" && !path.startsWith("/v1/") && env.ASSETS)
+    if (request.method === "GET" && path !== "/health" && !path.startsWith("/v1/") && !path.startsWith('/v2/') && env.ASSETS)
       return env.ASSETS.fetch(request);
     const origin = request.headers.get("Origin");
     const origins = (env.ALLOWED_ORIGINS ?? "")
@@ -82,12 +84,13 @@ export default {
     if (path === "/health" && request.method === "GET")
       return send({
         service: "FoodLens",
-        version: "0.4.0",
+        version: "0.4.4",
         ready: env.MODEL_ENABLED === "true" && !!env.SESSION_SECRET,
       });
-    if (!["/v1/session", "/v1/recognize"].includes(path))
+    if (!["/v1/session", "/v1/recognize", '/v2/identity', '/v2/membership', '/v2/recognize'].includes(path))
       return fail("NOT_FOUND", "接口不存在。", 404);
-    if (request.method !== "POST") return fail("METHOD", "请使用POST。", 405);
+    if (request.method !== (path === '/v2/membership' ? 'GET' : 'POST')) return fail("METHOD", "请求方式不支持。", 405);
+    if (env.BILLING_ENABLED === 'true' && path.startsWith('/v1/')) return fail('UPDATE_REQUIRED', '请更新食刻后继续使用识别服务。', 410);
     if (
       env.MODEL_ENABLED !== "true" ||
       !env.SESSION_SECRET ||
@@ -103,10 +106,24 @@ export default {
         return fail("RATE_LIMIT", "操作太快了，请一分钟后重试。", 429);
       if (path === "/v1/session")
         return send(await issueSession(env.SESSION_SECRET));
+      if (path === '/v2/identity') return send(await issueIdentity(env.SESSION_SECRET));
       const token =
         request.headers.get("Authorization")?.replace(/^Bearer /, "") ?? "";
-      const id = await verifySession(env.SESSION_SECRET, token);
-      if (!id) return fail("SESSION", "连接已过期，请重试。", 401);
+      const memberRequest = path.startsWith('/v2/');
+      const id = memberRequest ? await verifyIdentity(env.SESSION_SECRET, token) : await verifySession(env.SESSION_SECRET, token);
+      if (!id) return fail(memberRequest ? 'IDENTITY' : "SESSION", memberRequest ? '使用身份无法验证，请联系支持。' : "连接已过期，请重试。", 401);
+      let period;
+      try { period = memberRequest ? await getSubscription(env, id) : null; }
+      catch { return fail('SUBSCRIPTION_SERVICE', '暂时无法核实会员状态，请稍后重试。不会扣除识别次数。', 503); }
+      // Store transaction ownership survives restoring/transferring to a new installation.
+      // An app user ID alone must never grant a fresh 50 scans for the same paid period.
+      const ledger = period ? 'paid:' + await sign(env.SESSION_SECRET, period.ledgerKey) : 'member:' + id;
+      const member = memberRequest ? env.BUDGET.get(env.BUDGET.idFromName(ledger)) : null;
+      const memberCall = async (action: string, requestId = '', success = false) => member!.fetch('https://budget/member/' + action, { method: 'POST', body: JSON.stringify({ action, period, requestId, success }) });
+      if (path === '/v2/membership') {
+        const status = await (await memberCall('status')).json();
+        return send({ ...status as object, billingAvailable: billingAvailable(env), plan: MONTHLY_PLAN });
+      }
       if (!request.headers.get("Content-Type")?.startsWith("application/json"))
         return fail("TYPE", "请发送标签图片。", 415);
       let body: { image?: unknown };
@@ -137,15 +154,30 @@ export default {
       )
         return fail("IMAGE", "图片文件无效，请重新拍摄。", 415);
       const guard = env.BUDGET.get(env.BUDGET.idFromName("foodlens-global"));
-      const quota = await guard.fetch("https://budget/reserve", {
-        method: "POST",
-        body: JSON.stringify({ id, ip: ipKey }),
-      });
-      if (!quota.ok)
-        return fail("QUOTA", "今天的体验额度已用完，请明天再试。", 429);
-      const output = await env.AI.run(env.MODEL, modelInput(body.image));
-      const food = parseModelText(output, "scan-" + crypto.randomUUID());
-      return send({ food });
+      const requestId = crypto.randomUUID();
+      if (member) {
+        const reservation = await memberCall('reserve', requestId);
+        if (!reservation.ok) {
+          const result = await reservation.json() as { code: string };
+          return fail(result.code, result.code === 'FREE_QUOTA' ? '3 次免费识别已用完。月会员开放后，每个订阅周期可识别 50 次。' : result.code === 'BUSY' ? '上一张标签正在识别，请稍后再试。' : '本订阅周期的 50 次识别已用完，下次续订后重置。', 429);
+        }
+      }
+      let success = false;
+      try {
+        const quota = await guard.fetch('https://budget/reserve', {
+          method: 'POST', body: JSON.stringify({ id, ip: ipKey, pro: !!period }),
+        });
+        if (!quota.ok) return fail('QUOTA', '识别服务今日预算已用完，请稍后再试。不会扣除套餐次数。', 429);
+        const output = await env.AI.run(env.MODEL, modelInput(body.image));
+        const food = parseModelText(output, "scan-" + crypto.randomUUID());
+        success = true;
+        return send({ food });
+      } finally {
+        if (member) {
+          const finalized = await memberCall('finish', requestId, success);
+          if (!finalized.ok) throw new Error('ALLOWANCE_WRITE');
+        }
+      }
     } catch (e) {
       if (e instanceof LabelError) return fail("RETAKE", e.message, 422);
       const msg = e instanceof Error ? e.message : "";

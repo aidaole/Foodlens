@@ -478,7 +478,7 @@ export function Shell({
                   我的食刻
                 </Text>
                 <Text style={[s.small, { fontSize: 11, marginTop: 3 }]}>
-                  体验版 0.4.3
+                  体验版 0.4.4
                 </Text>
               </View>
             </View>

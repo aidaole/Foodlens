@@ -25,6 +25,17 @@ export async function sign(secret: string, text: string) {
     ),
   );
 }
+export async function issueIdentity(secret: string) {
+  const id = crypto.randomUUID();
+  return { id, token: id + '.' + await sign(secret, 'installation:' + id) };
+}
+export async function verifyIdentity(secret: string, token: string): Promise<string | null> {
+  try {
+    const [id, signature, extra] = token.split('.');
+    if (token.length > 100 || extra || !/^[0-9a-f-]{36}$/.test(id) || !signature) return null;
+    return await crypto.subtle.verify('HMAC', await key(secret), unb64(signature), encoder.encode('installation:' + id)) ? id : null;
+  } catch { return null; }
+}
 export async function issueSession(secret: string, now = Date.now()) {
   const expiresAt = Math.floor(now / 1000) + 3600;
   const payload = b64url(

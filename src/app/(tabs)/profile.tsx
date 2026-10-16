@@ -6,6 +6,7 @@ import { concerns, allergies, Profile } from "../../lib/food";
 import { NutritionChoices } from "../../components/NutritionChoices";
 import { LegalLinks } from '../../components/LegalLinks';
 import { legalContent } from '../../lib/legal';
+import { router } from 'expo-router';
 export default function ProfileScreen() {
   const store = useStore();
   const [confirm, setConfirm] = useState(false);
@@ -47,6 +48,9 @@ export default function ProfileScreen() {
           <Text style={{ fontSize: 12, color: "#647C48" }}>重看引导 ↗</Text>
         </Pressable>
       </View>
+      <Pressable accessibilityRole="button" onPress={() => router.push('/membership')} style={[s.card, s.row, { marginTop: 22, backgroundColor: C.lime, gap: 12 }]}>
+        <Icon name="spark" size={25} /><View style={{ flex: 1 }}><Text style={[s.heading, { fontSize: 18 }]}>FoodLens Pro 月会员</Text><Text style={[s.body, { fontSize: 12, marginTop: 4 }]}>每个订阅周期 50 次识别 · 查看方案与额度</Text></View><Icon name="arrow" size={19} />
+      </Pressable>
       <View style={[s.card, { marginTop: 22 }]}>
         <SectionTitle title="协议与隐私" eyebrow="YOUR RIGHTS" />
         {!legalContent.active && <Text style={[s.small, { color: '#8E633A', marginBottom: 8 }]}>上架准备草案 · 运营信息待确认</Text>}

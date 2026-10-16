@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { legalContent } from './legal';
 import { type Profile, type Food } from "./food";
 import {
   emptyState,
@@ -71,7 +72,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ? s.saved.filter((x) => x !== id)
         : [...s.saved, id],
     }));
-  const allowCloud = () => setState((s) => ({ ...s, cloudConsent: true }));
+  const allowCloud = () => setState((s) => ({ ...s, cloudConsent: true, cloudConsentRevision: legalContent.revision }));
   const revokeCloud = () => setState(revokeCloudConsent);
   const acknowledgeLegal = (revision: string) => setState(s => ({ ...s, legalAcceptance: { revision, at: new Date().toISOString() } }));
   const saveRecognition = (food: Food, thumbnail?: string) =>
@@ -84,6 +85,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     <Context.Provider
       value={{
         ...state,
+        cloudConsent: state.cloudConsent && state.cloudConsentRevision === legalContent.revision,
         ready,
         storageError,
         setProfile,
